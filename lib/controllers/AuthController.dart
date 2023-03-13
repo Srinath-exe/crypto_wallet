@@ -40,7 +40,22 @@ class AuthController extends GetxController
 
   @override
   onInit() async {
+    firebaseUser = Rx<User?>(firebaseAuth.currentUser);
+    if (firebaseUser.value != null) {
+      currentUser.value = await getCurrentUser();
+    }
+
+    firebaseUser.bindStream(firebaseAuth.userChanges());
+
     super.onInit();
+  }
+
+  Future<UserModel> getCurrentUser() async {
+    return await firebaseFirestore
+        .collection('users')
+        .doc(firebaseUser.value!.uid)
+        .get()
+        .then((event) => UserModel.fromMap(event));
   }
 
   void login(String email, String password) async {

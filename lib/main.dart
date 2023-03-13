@@ -2,7 +2,8 @@ import 'package:crypto_wallet/Screens/Auth/LoginScreen.dart';
 import 'package:crypto_wallet/Screens/Auth/OTP_screen.dart';
 import 'package:crypto_wallet/Screens/Auth/PhoneVerification.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
-import 'package:crypto_wallet/Screens/controllers/AuthController.dart';
+import 'package:crypto_wallet/Screens/MainScreen/Main_screen.dart';
+import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,8 +23,36 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var isLogin = false;
+
+  checkLogin() async {
+    firebaseAuth.authStateChanges().listen((User? user) {
+      if (user != null && mounted) {
+        setState(() {
+          isLogin = true;
+        });
+      } else {
+        setState(() {
+          isLogin = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    checkLogin();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +74,7 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
-      home: const SignInScreen(),
+      home: isLogin ? const MainScreen() : const SignInScreen(),
     );
   }
 }

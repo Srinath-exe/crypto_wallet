@@ -33,9 +33,9 @@ class UserModel {
         ? []
         : List<String>.from(data['friends']!.map((x) => x));
     isOnline = data["isOnline"] ?? false;
-    lastSeen = data["lastseen"] == null || data["lastseen"] == ""
-        ? null
-        : DateTime.parse(data["lastseen"].toString());
+    lastSeen = data["lastSeen"] == null || data["lastSeen"] == ""
+        ? DateTime.parse(DateTime.now.toString())
+        : DateTime.parse(data["lastSeen"].toString());
     token = data['token'] == null
         ? []
         : List<String>.from(data['token']!.map((x) => x));
@@ -50,7 +50,9 @@ class UserModel {
         "friends":
             friends == null ? [] : List<dynamic>.from(friends!.map((x) => x)),
         "token": token == null ? [] : List<dynamic>.from(token!.map((x) => x)),
-        "lastSeen": lastSeen,
+        "lastSeen": lastSeen == null
+            ? DateTime.now().toIso8601String()
+            : lastSeen!.toIso8601String(),
         "isOnline": isOnline,
       };
 }

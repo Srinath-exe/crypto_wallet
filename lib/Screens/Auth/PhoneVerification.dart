@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/Screens/Auth/OTP_screen.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
-import 'package:crypto_wallet/Screens/controllers/AuthController.dart';
+import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

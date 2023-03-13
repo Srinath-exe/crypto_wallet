@@ -2,9 +2,11 @@ import 'package:crypto_wallet/Screens/Auth/signUp.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
 import 'package:crypto_wallet/Screens/widgets/f&g_button.dart';
 import 'package:crypto_wallet/Screens/widgets/text_field.dart';
+import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  AuthController controller = Get.find();
   final TextEditingController emailController = TextEditingController();
   bool isSelected = true;
   bool loading = false;
@@ -166,14 +169,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       setState(() {
                         loading = true;
                       });
-                      // await context
-                      //     .read<FirebaseAuthMethods>()
-                      //     .signInWithGoogle(context);
+                      controller.googleLogin();
                       setState(() {
                         loading = false;
                       });
-                      // Navigator.pushNamedAndRemoveUntil(
-                      //     context, AppRoutes.homeScreenRoute, (route) => false);
                     },
                   )
                 ],

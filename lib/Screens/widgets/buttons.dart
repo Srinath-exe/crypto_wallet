@@ -24,7 +24,7 @@ class ThemeButton extends StatefulWidget {
       required this.text,
       this.bgColor = const Color(0xff5ed5a8),
       this.padding = const EdgeInsets.symmetric(vertical: 10),
-      this.height = 55,
+      this.height = 52,
       this.fontsize = 16,
       this.outlineButton = false,
       this.child,
@@ -51,7 +51,7 @@ class _ThemeButtonState extends State<ThemeButton> {
                     widget.outlineButton! ? Colors.transparent : widget.bgColor,
                 shape: RoundedRectangleBorder(
                     side: widget.outlineButton!
-                        ? BorderSide(width: 1.5, color: widget.bgColor!)
+                        ? BorderSide(width: 1, color: widget.bgColor!)
                         : const BorderSide(width: 1, color: Colors.transparent),
                     borderRadius: BorderRadius.circular(widget.borderRadius)),
                 elevation: widget.elevation,
