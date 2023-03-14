@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
 import 'package:crypto_wallet/Screens/HomeScreen/home_page.dart';
-import 'package:crypto_wallet/Screens/HomeScreen/home_screen.dart';
+import 'package:crypto_wallet/Screens/HomeScreen/chart.dart';
 import 'package:crypto_wallet/Screens/news/news_main.dart';
 import 'package:crypto_wallet/Screens/social/social_landing.dart';
 import 'package:crypto_wallet/Screens/wallet/wallet_landing.dart';
 import 'package:crypto_wallet/controllers/AuthController.dart';
+import 'package:crypto_wallet/controllers/CoinController.dart';
+import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +23,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  AuthController controller = Get.find();
+  CoinController coinController = Get.put(CoinController());
+
+  SocialController socialController = Get.put(SocialController());
+  AuthController authController = Get.find();
   int _currentIndex = 0;
   final screens = const [
     HomePage(),
@@ -55,11 +60,13 @@ class _MainScreenState extends State<MainScreen> {
                   color: kWhite,
                   child: InkWell(
                     child: Obx(() => Container(
-                          margin: const EdgeInsets.all(4.0),
+                          clipBehavior: Clip.hardEdge,
+                          margin: const EdgeInsets.all(0.0),
                           height: 42,
                           width: 42,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
                           child: Image.network(
-                            controller.currentUser.value.profileUrl ??
+                            authController.currentUser.value.profileUrl ??
                                 "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
                             height: 42,
                             fit: BoxFit.cover,
@@ -72,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
             actions: [
               IconButton(
                 onPressed: () {
-                  log(controller.currentUser.value.toJson().toString());
+                  log(authController.currentUser.value.toJson().toString());
                 },
                 icon: Image.asset("assets/images/icons/search.png"),
               ),

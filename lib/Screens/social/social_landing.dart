@@ -1,8 +1,11 @@
 import 'package:crypto_wallet/Models/User_model.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/social/Chat_screen.dart';
+import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
 import 'package:ternav_icons/ternav_icons.dart';
 
 class SocialLanding extends StatefulWidget {
@@ -13,6 +16,7 @@ class SocialLanding extends StatefulWidget {
 }
 
 class _SocialLandingState extends State<SocialLanding> {
+  SocialController controller = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,15 +24,70 @@ class _SocialLandingState extends State<SocialLanding> {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
+            ),
+            Row(
+              children: const [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Friends",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Obx(() => StreamBuilder(
+                  stream: controller.getAllUsers(),
+                  builder: (context, users) {
+                    if (users.connectionState == ConnectionState.waiting) {
+                      return showLoading();
+                    }
+                    return GridView.builder(
+                      itemCount: users.data!.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, childAspectRatio: 13 / 9),
+                      itemBuilder: (context, index) {
+                        return chatTile(user: users.data![index])
+                            .animate()
+                            .flipH()
+                            .fadeIn();
+                      },
+                    );
+                  },
+                )),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: const [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Contacts",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
             ),
             GridView.builder(
               itemCount: users.length,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, childAspectRatio: 13 / 9),
               itemBuilder: (context, index) {
@@ -43,8 +102,13 @@ class _SocialLandingState extends State<SocialLanding> {
 
   Widget chatTile({required UserModel user}) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context, rootNavigator: true).push(
+          MaterialPageRoute(builder: (context) => ChatScreen(user: user)),
+        );
+      },
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             height: 40,
@@ -62,13 +126,13 @@ class _SocialLandingState extends State<SocialLanding> {
               }
             }),
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Text(
             user.name!,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w400, color: kWhite),
           ),
         ],

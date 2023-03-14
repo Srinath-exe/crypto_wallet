@@ -3,6 +3,7 @@ import 'package:crypto_wallet/Models/User_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -58,7 +59,7 @@ Widget switcher({required Widget child}) {
 }
 
 Widget showLoading() {
-  return Lottie.network("assets/lottie/loading.json");
+  return Lottie.asset("assets/lottie/loading.json", width: 250);
 }
 
 List<UserModel> users = [
@@ -127,3 +128,32 @@ Map<int, GlobalKey> navigatorKeys = {
   2: GlobalKey(),
   3: GlobalKey(),
 };
+
+String defaultPic =
+    "https://www.nicepng.com/png/detail/73-730154_open-default-profile-picture-png.png";
+Widget profilePic(
+    {required String? url,
+    double height = 30,
+    double imageWidth = 30,
+    EdgeInsets padding = const EdgeInsets.all(4)}) {
+  return Padding(
+    padding: padding,
+    child: Container(
+      height: height,
+      width: height,
+      decoration: const BoxDecoration(shape: BoxShape.circle),
+      clipBehavior: Clip.hardEdge,
+      child: Image.network(url ?? defaultPic,
+          fit: BoxFit.cover,
+          width: imageWidth, loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        } else {
+          return const Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+      }),
+    ),
+  );
+}
