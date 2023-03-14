@@ -86,7 +86,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/main_logo.png
+  image: assets/images/app_icon.png
 
 # # The following section is specific to Flutter packages.
 flutter_icons:
