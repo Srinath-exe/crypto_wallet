@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: height / 4,
+              height: 100,
               color: kBlack,
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child:
@@ -43,39 +43,6 @@ class _HomePageState extends State<HomePage> {
                           height: constraints.maxHeight * 0.4,
                           width: constraints.maxWidth / 5,
                           text: "Deposit",
-                          onTap: () {},
-                        ),
-                        iconButtons(
-                          image: "assets/images/icons/referal.png",
-                          height: constraints.maxHeight * 0.4,
-                          width: constraints.maxWidth / 5,
-                          text: "Referal",
-                          onTap: () {},
-                        ),
-                        iconButtons(
-                          image: "assets/images/icons/Grid.png",
-                          height: constraints.maxHeight * 0.4,
-                          width: constraints.maxWidth / 5,
-                          text: "Grid Trading",
-                          onTap: () {},
-                        ),
-                        iconButtons(
-                          image: "assets/images/icons/margin.png",
-                          height: constraints.maxHeight * 0.4,
-                          width: constraints.maxWidth / 5,
-                          text: "Margin",
-                          onTap: () {},
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        iconButtons(
-                          image: "assets/images/icons/launchpad.png",
-                          height: constraints.maxHeight * 0.4,
-                          width: constraints.maxWidth / 5,
-                          text: "Launchpad",
                           onTap: () {},
                         ),
                         iconButtons(
@@ -102,6 +69,10 @@ class _HomePageState extends State<HomePage> {
                           },
                         )
                       ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [],
                     )
                   ],
                 );
@@ -110,10 +81,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 12,
             ),
-            topMenu(),
-            const SizedBox(
-              height: 4,
-            ),
+
             const CoinsList(),
             // Container(
             //   color: kWhite,

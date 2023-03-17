@@ -104,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ));
                     } else {
                       controller.sendText(
-                          chatId: widget.chatId!,
+                          chatId: controller.chatId.value,
                           message: MessageModel(
                             messageId: messageId,
                             text: text,

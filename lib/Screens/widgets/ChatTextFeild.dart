@@ -75,20 +75,43 @@ class _ChatTextFeildState extends State<ChatTextFeild> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: kBlack,
-                    prefixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        profilePic(
-                            height: 40,
-                            url: controller.currentUser.value.profileUrl!),
-                        const SizedBox(
-                          width: 8,
-                        )
-                      ],
-                    ),
+                    prefixIcon: !isShowSendButton
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: kGreen),
+                                  onPressed: () {},
+                                  child: Text("Pay")),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: kGreen),
+                                  onPressed: () {},
+                                  child: Text("Request")),
+                              SizedBox(
+                                width: 8,
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              profilePic(
+                                  height: 40,
+                                  url:
+                                      controller.currentUser.value.profileUrl!),
+                              const SizedBox(
+                                width: 8,
+                              )
+                            ],
+                          ),
                     suffixIcon: isShowSendButton
                         ? ZoomTapAnimation(
                             onTap: () {
@@ -98,10 +121,10 @@ class _ChatTextFeildState extends State<ChatTextFeild> {
                                 isShowSendButton = false;
                               });
                             },
-                            child: SizedBox(
+                            child: const SizedBox(
                               width: 80,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text(
                                   "Send",
@@ -143,7 +166,7 @@ class _ChatTextFeildState extends State<ChatTextFeild> {
                             ),
                           ),
                     hintText: 'Type a message!',
-                    hintStyle: TextStyle(color: kGrey),
+                    hintStyle: const TextStyle(color: kGrey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: const BorderSide(

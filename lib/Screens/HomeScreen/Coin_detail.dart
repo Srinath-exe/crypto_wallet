@@ -45,7 +45,6 @@ class _SelectCoinState extends State<CoinsDetail> {
               Icons.arrow_back_ios_new_rounded,
               size: 16,
             )),
-        // leadingWidth: 20,
         title: Container(
           height: 60,
           width: Config().deviceWidth(context) * 0.6,
@@ -170,7 +169,6 @@ class _SelectCoinState extends State<CoinsDetail> {
                   ],
                 ),
               ),
-              const Divider(),
               Column(
                 children: [
                   SizedBox(
@@ -291,86 +289,131 @@ class _SelectCoinState extends State<CoinsDetail> {
                   ),
                 ],
               ),
-              //  Padding(
-              //   padding: EdgeInsets.symmetric(
-              //       horizontal: myWidth * 0.05, vertical: myHeight * 0.02),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Column(
-              //         children: [
-              //           const Text(
-              //             'Low',
-              //             style: TextStyle(
-              //                 fontSize: 20,
-              //                 fontWeight: FontWeight.normal,
-              //                 color: Colors.grey),
-              //           ),
-              //           SizedBox(
-              //             height: myHeight * 0.01,
-              //           ),
-              //           Text(
-              //             '\$${widget.selectItem.low24H}',
-              //             style: const TextStyle(
-              //                 fontSize: 18,
-              //                 fontWeight: FontWeight.normal,
-              //                 color: Colors.black),
-              //           ),
-              //         ],
-              //       ),
-              //       Column(
-              //         children: [
-              //           const Text(
-              //             'High',
-              //             style: TextStyle(
-              //                 fontSize: 20,
-              //                 fontWeight: FontWeight.normal,
-              //                 color: Colors.grey),
-              //           ),
-              //           SizedBox(
-              //             height: myHeight * 0.01,
-              //           ),
-              //           Text(
-              //             '\$${widget.selectItem.high24H}',
-              //             style: const TextStyle(
-              //                 fontSize: 18,
-              //                 fontWeight: FontWeight.normal,
-              //                 color: Colors.black),
-              //           ),
-              //         ],
-              //       ),
-              //       Column(
-              //         children: [
-              //           const Text(
-              //             'Vol',
-              //             style: TextStyle(
-              //               fontSize: 20,
-              //               fontWeight: FontWeight.normal,
-              //             ),
-              //           ),
-              //           SizedBox(
-              //             height: myHeight * 0.01,
-              //           ),
-              //           Text(
-              //             '\$${widget.selectItem.totalVolume}M',
-              //             style: const TextStyle(
-              //               fontSize: 18,
-              //               fontWeight: FontWeight.normal,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: kBlack, borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Today Volume',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: myHeight * 0.01,
+                            ),
+                            Text(
+                              '\$${widget.selectItem.totalVolume}M',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          'Volume is the number of shares of a security traded durnig a given period of time',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: kWhite.withOpacity(0.6),
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: kBlack, borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(children: [
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Low',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey),
+                          ),
+                          Text(
+                            '\$${widget.selectItem.low24H.toPrecision(2)}',
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: kWhite),
+                          ),
+                        ],
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Text("•"),
+                      ),
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'High',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey),
+                          ),
+                          Text(
+                            '\$${widget.selectItem.high24H.toPrecision(2)}',
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: kWhite),
+                          ),
+                        ],
+                      ))
+                    ]),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: myWidth * 0.05, vertical: myHeight * 0.02),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [],
+                    ),
+                    Column(
+                      children: [],
+                    ),
+                  ],
+                ),
+              ),
               Container(
                 height: myHeight * 0.1,
                 width: myWidth,
                 // color: Colors.amber,
                 child: Column(
                   children: [
-                    const Divider(),
                     SizedBox(
                       height: myHeight * 0.01,
                     ),
@@ -385,8 +428,8 @@ class _SelectCoinState extends State<CoinsDetail> {
                             padding: EdgeInsets.symmetric(
                                 vertical: myHeight * 0.015),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: const Color(0xffFBC700)),
+                                borderRadius: BorderRadius.circular(20),
+                                color: kGreen),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -396,7 +439,10 @@ class _SelectCoinState extends State<CoinsDetail> {
                                 ),
                                 const Text(
                                   'Add to portfolio',
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: kBlack,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -490,7 +536,7 @@ class _SelectCoinState extends State<CoinsDetail> {
       padding: const EdgeInsets.all(16.0),
       child: Material(
         borderRadius: BorderRadius.circular(20),
-        elevation: 20,
+        elevation: 8,
         shadowColor:
             widget.selectItem.marketCapChangePercentage24H >= 0 ? kGreen : kRed,
         child: Container(
