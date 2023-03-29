@@ -50,13 +50,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     checkLogin();
-
+    Get.put(AuthController());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Crypto Wallet',
       theme: ThemeData(
         platform: TargetPlatform.iOS,

@@ -1,6 +1,9 @@
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/profile/CreateProfileScree.dart';
 import 'package:crypto_wallet/Screens/widgets/text_field.dart';
+import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController signUpEmailController = TextEditingController();
   TextEditingController signUpPasswordController = TextEditingController();
+  AuthController controller = Get.find();
   bool _passNotVisible = true;
 
   @override
@@ -51,7 +55,7 @@ class _SignUpState extends State<SignUp> {
                   Spacer(),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               textField(
                 controller: signUpEmailController,
                 hint: "Enter your email",
@@ -96,30 +100,32 @@ class _SignUpState extends State<SignUp> {
               const Spacer(
                 flex: 3,
               ),
-              Container(
-                height: constraints.maxHeight * 0.13,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(40)),
-                child: ElevatedButton(
-                    onPressed: () async {
-                      // await signUpUser;
-                      // Navigator.pushNamedAndRemoveUntil(context,
-                      //     AppRoutes.signInScreenRoute, (route) => false);
-                      // showSnackBar(context, "Login from here");
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: kGreen,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    child: const Text(
-                      "Sign up",
-                      style: TextStyle(
-                        color: kBlack,
-                        //fontFamily: "MYRIADPRO",
-                        fontSize: 15,
-                      ),
-                    )),
-              ),
+              Obx(() => Container(
+                    height: constraints.maxHeight * 0.13,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          controller.register(signUpEmailController.text,
+                              signUpPasswordController.text);
+
+                          Nav().goTo(const EditProfile(), context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: kGreen,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: controller.isLoading.value
+                            ? showLoading()
+                            : const Text(
+                                "Sign up",
+                                style: TextStyle(
+                                  color: kBlack,
+                                  //fontFamily: "MYRIADPRO",
+                                  fontSize: 15,
+                                ),
+                              )),
+                  )),
               const Spacer(
                 flex: 1,
               ),

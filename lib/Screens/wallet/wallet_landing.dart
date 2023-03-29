@@ -1,8 +1,15 @@
+import 'package:crypto_wallet/Models/wallet/walletModel.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/wallet/createWalletScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/scan_qr.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
+import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ternav_icons/ternav_icons.dart';
+
+import '../Constants/generate.dart';
 
 class WalletLanding extends StatefulWidget {
   const WalletLanding({super.key});
@@ -12,7 +19,9 @@ class WalletLanding extends StatefulWidget {
 }
 
 class _WalletLandingState extends State<WalletLanding> {
+  WalletController controller = Get.find();
   bool scan = true;
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -24,14 +33,21 @@ class _WalletLandingState extends State<WalletLanding> {
             return Scaffold(
               backgroundColor: kDarkBlack,
               body: SafeArea(
-                  child: Container(
-                      width: Config().deviceWidth(context),
-                      child: Column(
-                        children: [
-                          walletInfo(),
-                          assets(),
-                        ],
-                      ))),
+                  child: SingleChildScrollView(
+                child: Container(
+                    width: Config().deviceWidth(context),
+                    child: Column(
+                      children: [
+                        Obx(() {
+                          if (controller.wallet == null) {
+                            return createWallet();
+                          }
+                          return walletInfo();
+                        }),
+                        assets(),
+                      ],
+                    )),
+              )),
             );
           },
         );
@@ -39,6 +55,32 @@ class _WalletLandingState extends State<WalletLanding> {
     );
   }
   // switcher(child: scan ? scanQR() : qrCode()
+
+  createWallet() {
+    return Column(
+      children: [
+        LottieBuilder.network(
+          'https://assets1.lottiefiles.com/packages/lf20_zooicwxj.json',
+          width: Config().deviceWidth(context),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ThemeButton(
+              onTap: () {
+                controller.walletCollection
+                    .doc(controller.controller.currentUser.value.uid)
+                    .set(WalletModel(
+                      token: 1000,
+                      total: 1000,
+                      publicKey: generateKey(length: 16),
+                      privateKey: generateKey(length: 24),
+                    ).toJson());
+              },
+              text: "Create Wallet"),
+        )
+      ],
+    );
+  }
 
   walletInfo() {
     return Container(

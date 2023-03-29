@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/Models/User_model.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/Constants/generate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,6 +90,20 @@ class AuthController extends GetxController
       firebaseUser = Rx<User?>(firebaseAuth.currentUser);
       firebaseUser.bindStream(firebaseAuth.userChanges());
       token = await firebaseMessaging.getToken();
+      final CollectionReference userCollection =
+          FirebaseFirestore.instance.collection('users');
+      userCollection.doc(FirebaseAuth.instance.currentUser!.uid).set(UserModel(
+              mail: email,
+              name: "User ${generateKey(letter: false).substring(0, 4)}",
+              phone: '',
+              uid: firebaseUser.value!.uid,
+              profileUrl:
+                  "https://avatars.githubusercontent.com/u/36773034?v=4",
+              token: [token!],
+              friends: [],
+              isOnline: true,
+              lastSeen: DateTime.now())
+          .toJson());
     } catch (firebaseAuthException) {
       isLoading.value = false;
       log(firebaseAuthException.toString());
@@ -218,6 +233,11 @@ class AuthController extends GetxController
       }
       update();
     });
+  }
+
+  void signOut() {
+    Get.deleteAll(force: true).then((value) => log("Deleted"));
+    firebaseAuth.signOut();
   }
 
   @override

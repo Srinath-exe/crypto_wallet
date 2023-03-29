@@ -4,11 +4,13 @@ import 'package:crypto_wallet/Screens/Constants/constants.dart';
 import 'package:crypto_wallet/Screens/HomeScreen/home_page.dart';
 import 'package:crypto_wallet/Screens/HomeScreen/chart.dart';
 import 'package:crypto_wallet/Screens/news/news_main.dart';
+import 'package:crypto_wallet/Screens/profile/CreateProfileScree.dart';
 import 'package:crypto_wallet/Screens/social/social_landing.dart';
 import 'package:crypto_wallet/Screens/wallet/wallet_landing.dart';
 import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:crypto_wallet/controllers/CoinController.dart';
 import 'package:crypto_wallet/controllers/SocialController.dart';
+import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   CoinController coinController = Get.put(CoinController());
 
   SocialController socialController = Get.put(SocialController());
+  WalletController walletController = Get.put(WalletController());
   AuthController authController = Get.find();
-  int _currentIndex = 0;
+  int _currentIndex = 3;
   final screens = const [
     HomePage(),
     NewsScreen(),
@@ -59,12 +62,16 @@ class _MainScreenState extends State<MainScreen> {
                 child: Material(
                   color: kWhite,
                   child: InkWell(
+                    onTap: () {
+                      Nav().goTo(const EditProfile(), context);
+                    },
                     child: Obx(() => Container(
                           clipBehavior: Clip.hardEdge,
                           margin: const EdgeInsets.all(0.0),
                           height: 42,
                           width: 42,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
                           child: Image.network(
                             authController.currentUser.value.profileUrl ??
                                 "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",

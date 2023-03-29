@@ -257,37 +257,30 @@ class _SignInScreenState extends State<SignInScreen> {
             const Spacer(
               flex: 3,
             ),
-            Container(
-              height: constraints.maxHeight * 0.13,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(40)),
-              child: ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    // await context.read<FirebaseAuthMethods>().loginWithEmail(
-                    //       email: emailController.text,
-                    //       password: emailPasswordController.text,
-                    //       context: context,
-                    //     );
-                    loading = false;
-                    // Navigator.pushNamedAndRemoveUntil(
-                    //     context, AppRoutes.homeScreenRoute, (route) => false);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: kGreen,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  child: const Text(
-                    "Sign in",
-                    style: TextStyle(
-                      color: kBlack,
-                      //fontFamily: "MYRIADPRO",
-                      fontSize: 15,
-                    ),
-                  )),
-            ),
+            Obx(() => Container(
+                  height: constraints.maxHeight * 0.13,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        controller.login(
+                            emailController.text, emailPasswordController.text);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: kGreen,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      child: controller.isLoading.value
+                          ? showLoading()
+                          : const Text(
+                              "Sign in",
+                              style: TextStyle(
+                                color: kBlack,
+                                //fontFamily: "MYRIADPRO",
+                                fontSize: 15,
+                              ),
+                            )),
+                )),
             const Spacer(
               flex: 1,
             ),
