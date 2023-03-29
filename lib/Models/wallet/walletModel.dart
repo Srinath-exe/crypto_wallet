@@ -17,14 +17,16 @@ class WalletModel {
     this.token,
     this.publicKey,
     this.privateKey,
+    this.docId,
   });
-
+  String? docId;
   int? total;
   double? token;
   String? publicKey;
   String? privateKey;
 
-  factory WalletModel.fromJson(DocumentSnapshot json) => WalletModel(
+  factory WalletModel.fromJson(dynamic json) => WalletModel(
+        docId: json.id,
         total: json["total"],
         token: json["token"]?.toDouble(),
         publicKey: json["publicKey"],

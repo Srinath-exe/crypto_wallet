@@ -1,6 +1,10 @@
+import 'package:crypto_wallet/Models/wallet/transactionModel.dart';
 import 'package:crypto_wallet/Models/wallet/walletModel.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/transaction/send.dart';
+import 'package:crypto_wallet/Screens/wallet/ScanQRCodeScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/createWalletScreen.dart';
+import 'package:crypto_wallet/Screens/wallet/qrCodeScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/scan_qr.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
 import 'package:crypto_wallet/controllers/walletController.dart';
@@ -39,11 +43,12 @@ class _WalletLandingState extends State<WalletLanding> {
                     child: Column(
                       children: [
                         Obx(() {
-                          if (controller.wallet == null) {
+                          if (controller.wallet.value.docId == null) {
                             return createWallet();
                           }
                           return walletInfo();
                         }),
+                        transactions(),
                         assets(),
                       ],
                     )),
@@ -54,7 +59,6 @@ class _WalletLandingState extends State<WalletLanding> {
       },
     );
   }
-  // switcher(child: scan ? scanQR() : qrCode()
 
   createWallet() {
     return Column(
@@ -116,10 +120,27 @@ class _WalletLandingState extends State<WalletLanding> {
             const SizedBox(
               height: 12,
             ),
-            const Text(
-              "\$ 2,004.23",
-              style: TextStyle(
-                  color: kWhite, fontWeight: FontWeight.w600, fontSize: 40),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/bnb-logo.png",
+                    width: 50,
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    "${controller.wallet.value.total}",
+                    style: const TextStyle(
+                        color: kWhite,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 40),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 4,
@@ -127,9 +148,31 @@ class _WalletLandingState extends State<WalletLanding> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/walletadd.png",
-                  height: 16,
+                Row(
+                  children: [
+                    const Text(
+                      "My Wallet",
+                      style: TextStyle(color: kLightGrey, fontSize: 12),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      width: 120,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: kWhite),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4),
+                        child: Text(
+                          controller.wallet.value.docId!,
+                          style: const TextStyle(color: kGrey, fontSize: 10),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(
                   width: 24,
@@ -150,11 +193,7 @@ class _WalletLandingState extends State<WalletLanding> {
                     child: ThemeButton(
                   text: "Send",
                   onTap: () {
-                    Nav().goTo(
-                        ScanQr(
-                          scan: true,
-                        ),
-                        context);
+                    Nav().goTo(const SendScreen(), context);
                   },
                   height: 46,
                   child: Row(
@@ -183,7 +222,7 @@ class _WalletLandingState extends State<WalletLanding> {
                   text: "Send",
                   height: 46,
                   onTap: () {
-                    Nav().goTo(ScanQr(), context);
+                    Nav().goTo(const QrCodeScanScreen(), context);
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -237,6 +276,25 @@ class _WalletLandingState extends State<WalletLanding> {
           ],
         ),
       ),
+    );
+  }
+
+  transactions() {
+    controller.transactions.isEmpty
+        ? LottieBuilder.network(
+            'https://assets7.lottiefiles.com/packages/lf20_x6xd8xxi.json')
+        : ListView.builder(
+            itemCount: controller.transactions.length,
+            itemBuilder: (context, index) {
+              return transcationTile(controller.transactions[index]);
+            },
+          );
+  }
+
+  transcationTile(TransactionModel trsc) {
+    return ListTile(
+      title: Text(trsc.value.toString()),
+      subtitle: Text(""),
     );
   }
 }

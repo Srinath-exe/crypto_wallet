@@ -34,10 +34,10 @@ class _ScanQrState extends State<ScanQr> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            "BTC 40,2398",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-          ),
+          // const Text(
+          //   "BTC 40,2398",
+          //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          // ),
           const SizedBox(
             height: 40,
           ),

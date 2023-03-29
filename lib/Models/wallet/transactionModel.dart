@@ -36,7 +36,7 @@ class TransactionModel {
   double? value;
   String? blockChainNetwork;
   double? gasFees;
-  String? dateTime;
+  DateTime? dateTime;
   String? recieverAddress;
   String? senderAddress;
   String? senderPublicKey;
@@ -55,7 +55,7 @@ class TransactionModel {
       value: json["value"]?.toDouble(),
       blockChainNetwork: json["blockChainNetwork"],
       gasFees: json["gasFees"]?.toDouble(),
-      dateTime: json["dateTime"],
+      dateTime: DateTime.fromMillisecondsSinceEpoch(json['dateTime']),
       recieverAddress: json["RecieverAddress"],
       senderAddress: json["senderAddress"],
       senderPublicKey: json["senderPublicKey"],
@@ -77,7 +77,7 @@ class TransactionModel {
         "value": value,
         "blockChainNetwork": blockChainNetwork,
         "gasFees": gasFees,
-        "dateTime": dateTime,
+        "dateTime": dateTime!.millisecondsSinceEpoch,
         "RecieverAddress": recieverAddress,
         "senderAddress": senderAddress,
         "senderPublicKey": senderPublicKey,

@@ -65,6 +65,8 @@ dependencies:
   path_provider: ^2.0.13
   grouped_list: ^5.1.2
   fluttertoast: ^8.2.1
+  pretty_qr_code: ^2.0.3
+  qr_code_scanner: ^1.0.1
 
 
 
