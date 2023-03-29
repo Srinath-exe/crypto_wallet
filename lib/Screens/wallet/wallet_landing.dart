@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ternav_icons/ternav_icons.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../Constants/generate.dart';
 
 class WalletLanding extends StatefulWidget {
@@ -38,20 +38,25 @@ class _WalletLandingState extends State<WalletLanding> {
               backgroundColor: kDarkBlack,
               body: SafeArea(
                   child: SingleChildScrollView(
-                child: Container(
-                    width: Config().deviceWidth(context),
-                    child: Column(
-                      children: [
-                        Obx(() {
-                          if (controller.wallet.value.docId == null) {
-                            return createWallet();
-                          }
-                          return walletInfo();
-                        }),
-                        transactions(),
-                        assets(),
-                      ],
-                    )),
+                child: Column(
+                  children: [
+                    Obx(() {
+                      return Column(
+                        children: [
+                          controller.wallet.value.docId == null
+                              ? createWallet()
+                              : InkWell(
+                                  onTap: () {
+                                    Nav().goTo(CreateWalletScreen(), context);
+                                  },
+                                  child: walletInfo()),
+                          transactions(),
+                          assets(),
+                        ],
+                      );
+                    }),
+                  ],
+                ),
               )),
             );
           },
@@ -129,11 +134,11 @@ class _WalletLandingState extends State<WalletLanding> {
                     "assets/images/bnb-logo.png",
                     width: 50,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
                   Text(
-                    "${controller.wallet.value.total}",
+                    "${controller.wallet.value.token}",
                     style: const TextStyle(
                         color: kWhite,
                         fontWeight: FontWeight.w600,
@@ -280,21 +285,73 @@ class _WalletLandingState extends State<WalletLanding> {
   }
 
   transactions() {
-    controller.transactions.isEmpty
-        ? LottieBuilder.network(
-            'https://assets7.lottiefiles.com/packages/lf20_x6xd8xxi.json')
-        : ListView.builder(
-            itemCount: controller.transactions.length,
-            itemBuilder: (context, index) {
-              return transcationTile(controller.transactions[index]);
-            },
-          );
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                "Transcations",
+                style: TextStyle(
+                    color: kWhite, fontWeight: FontWeight.w600, fontSize: 22),
+              ),
+            ],
+          ),
+          controller.transactions.isEmpty
+              ? Column(
+                  children: [
+                    const Text("No Transactions"),
+                    LottieBuilder.network(
+                        'https://assets7.lottiefiles.com/packages/lf20_x6xd8xxi.json'),
+                  ],
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.transactions.length,
+                  itemBuilder: (context, index) {
+                    return transcationTile(controller.transactions[index]);
+                  },
+                ),
+        ],
+      ),
+    );
   }
 
   transcationTile(TransactionModel trsc) {
+    bool issender =
+        controller.controller.firebaseUser.value!.uid == trsc.sender;
     return ListTile(
-      title: Text(trsc.value.toString()),
-      subtitle: Text(""),
+      title: Text("${issender ? "-" : "+"}" + trsc.value.toString() + "BNB"),
+      subtitle: Text(issender ? "Sent" : "Recieved"),
+      leading: Image.asset(
+        "assets/images/bnb-logo.png",
+        width: 50,
+      ),
+      trailing: Container(
+        width: Config().deviceWidth(context) * 0.4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              trsc.reciever.toString(),
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              " - ${timeago.format(trsc.dateTime!, locale: 'en_short')}",
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -24,24 +24,29 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
       appBar: AppBar(
         backgroundColor: kBlack,
         foregroundColor: kWhite,
-        title: const Text("Generate Wallet"),
+        title: const Text("My Wallet"),
       ),
       body: SafeArea(
-          child: Column(
-        children: [
-          LottieBuilder.network(
-              'https://assets1.lottiefiles.com/packages/lf20_O1b0iWuPju.json'),
-          title("Wallet Id"),
-          id(generateKey(length: 24)),
-          title("Public Key"),
-          id(generateKey(length: 16)),
-          title("Private Key"),
-          id(generateKey(length: 36)),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ThemeButton(onTap: () {}, text: "Create Wallet"),
-          )
-        ],
+          child: SingleChildScrollView(
+        child: Column(
+          children: [
+            LottieBuilder.network(
+                'https://assets1.lottiefiles.com/packages/lf20_O1b0iWuPju.json'),
+            title("Wallet Id"),
+            id(controller.wallet.value.docId!),
+            title("Public Key"),
+            id(controller.wallet.value.publicKey!),
+            title("Private Key"),
+            id(controller.wallet.value.privateKey!),
+            SizedBox(
+              height: 120,
+            )
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: ThemeButton(onTap: () {}, text: "Create Wallet"),
+            // )
+          ],
+        ),
       )),
     );
   }
