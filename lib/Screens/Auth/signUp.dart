@@ -108,8 +108,6 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () async {
                           controller.register(signUpEmailController.text,
                               signUpPasswordController.text);
-
-                          Nav().goTo(const EditProfile(), context);
                         },
                         style: ElevatedButton.styleFrom(
                             primary: kGreen,

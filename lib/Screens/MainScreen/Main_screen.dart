@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   SocialController socialController = Get.put(SocialController());
   WalletController walletController = Get.put(WalletController());
   AuthController authController = Get.find();
-  int _currentIndex = 3;
+  int _currentIndex = 0;
   final screens = const [
     HomePage(),
     NewsScreen(),
