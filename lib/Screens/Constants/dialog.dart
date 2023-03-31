@@ -6,16 +6,16 @@ successGif(
   BuildContext context,
 ) {
   return Lottie.asset("assets/lottie/success.json",
-      width: Config().deviceWidth(context) * 0.8, repeat: false);
+      width: Config().deviceWidth(context) * 0.8, repeat: true);
 }
 
 Dialog successDialog(BuildContext context, String title) {
   return Dialog(
-    backgroundColor: Colors.transparent,
+    backgroundColor: Colors.black.withOpacity(0.8),
     insetPadding: const EdgeInsets.all(30),
     child: Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(40), color: kWhite),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40), color: kDarkBlack),
       width: double.infinity,
       height: Config().deviceHeight(context) * 0.4,
       child: Stack(
@@ -27,27 +27,34 @@ Dialog successDialog(BuildContext context, String title) {
             child: Column(
               children: [
                 Container(
-                  width: Config().deviceWidth(context) * 0.7,
+                  width: Config().deviceWidth(context) * 0.8,
                   alignment: Alignment.center,
-                  child: Text(
-                    "$title",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: kBlack,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Transaction completed Successfully",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            color: kWhite),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Text(
+                        "$title",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: kWhite,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Transaction completed Successfully",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w600, color: kBlack),
-                ),
-                const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 TextButton(
                     onPressed: () {
@@ -68,9 +75,9 @@ Dialog successDialog(BuildContext context, String title) {
               ],
             ),
           ),
-          Positioned(top: -160, child: successGif(context)),
+          Positioned(top: -120, child: successGif(context)),
           Positioned(
-              top: 20,
+              top: 30,
               right: 20,
               child:
                   IconButton(onPressed: () {}, icon: const Icon(Icons.share))),

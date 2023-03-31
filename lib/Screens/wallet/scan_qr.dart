@@ -1,6 +1,9 @@
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
+import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:ternav_icons/ternav_icons.dart';
 
 class ScanQr extends StatefulWidget {
@@ -12,6 +15,7 @@ class ScanQr extends StatefulWidget {
 }
 
 class _ScanQrState extends State<ScanQr> {
+  WalletController controller = Get.find();
   @override
   late bool scan;
   @override
@@ -57,7 +61,7 @@ class _ScanQrState extends State<ScanQr> {
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 14, color: kLightGrey),
           ),
-          copyAddress(),
+          copyAddress(context, controller.controller.currentUser.value.uid!),
           const SizedBox(
             height: 40,
           ),
@@ -87,34 +91,6 @@ class _ScanQrState extends State<ScanQr> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  copyAddress() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: kBlack),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text("n2e5dirgMNYdQskfiP5zj39VYemXareK4C"),
-            ),
-            Container(
-              color: kWhite,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(TernavIcons.lightOutline.copy),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
@@ -188,4 +164,40 @@ class _ScanQrState extends State<ScanQr> {
           ],
         ));
   }
+}
+
+copyAddress(BuildContext context, String id) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      clipBehavior: Clip.hardEdge,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(20), color: kBlack),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(id),
+          ),
+          InkWell(
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: id)).then((_) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Copied to your clipboard !')));
+              });
+            },
+            child: Container(
+              color: kWhite,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(TernavIcons.lightOutline.copy),
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

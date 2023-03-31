@@ -259,7 +259,9 @@ class MenuScreen extends StatelessWidget {
                             height: constraints.maxHeight * 0.15,
                             width: constraints.maxWidth / 5,
                             text: "Pay",
-                            onTap: () {},
+                            onTap: () {
+                              
+                            },
                           ),
                           iconButtons(
                             image: "assets/images/icons/loan.png",

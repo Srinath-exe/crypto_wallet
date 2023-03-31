@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQrCodeScreen extends StatefulWidget {
@@ -76,7 +77,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                         : TextButton(
                             onPressed: () {
                               widget.onScanned(barcode!.code!);
-                              Navigator.pop(context);
+                              // Navigator.pop(context);
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -111,6 +112,8 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
       setState(() {
         barcode = event;
       });
+      widget.onScanned(barcode!.code!);
+      Navigator.pop(context);
     });
   }
 }

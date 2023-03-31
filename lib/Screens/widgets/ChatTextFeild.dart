@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:crypto_wallet/Models/MessageModel.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/transaction/send.dart';
 import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -15,11 +16,13 @@ import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 class ChatTextFeild extends StatefulWidget {
   Function(String) onSend;
   bool isGroup;
+  String user;
   String id;
   ChatTextFeild(
       {super.key,
       required this.onSend,
       this.isGroup = false,
+      required this.user,
       required this.id});
 
   @override
@@ -82,17 +85,18 @@ class _ChatTextFeildState extends State<ChatTextFeild> {
                               TextButton(
                                   style: TextButton.styleFrom(
                                       backgroundColor: kGreen),
-                                  onPressed: () {},
-                                  child: Text("Pay")),
-                              SizedBox(
+                                  onPressed: () {
+                                    Nav().goTo(
+                                        SendScreen(
+                                          id: widget.id,
+                                        ),
+                                        context);
+                                  },
+                                  child: const Text("Pay")),
+                              const SizedBox(
                                 width: 8,
                               ),
-                              TextButton(
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: kGreen),
-                                  onPressed: () {},
-                                  child: Text("Request")),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                             ],

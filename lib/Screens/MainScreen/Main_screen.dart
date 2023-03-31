@@ -1,17 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/Constants/localNotification.dart';
 import 'package:crypto_wallet/Screens/HomeScreen/home_page.dart';
 import 'package:crypto_wallet/Screens/HomeScreen/chart.dart';
 import 'package:crypto_wallet/Screens/news/news_main.dart';
 import 'package:crypto_wallet/Screens/profile/CreateProfileScree.dart';
 import 'package:crypto_wallet/Screens/social/social_landing.dart';
+import 'package:crypto_wallet/Screens/transaction/recievedPayment.dart';
+import 'package:crypto_wallet/Screens/transaction/send.dart';
 import 'package:crypto_wallet/Screens/wallet/wallet_landing.dart';
 import 'package:crypto_wallet/controllers/AuthController.dart';
 import 'package:crypto_wallet/controllers/CoinController.dart';
 import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -37,8 +43,12 @@ class _MainScreenState extends State<MainScreen> {
     SocialLanding(),
     WalletLanding(),
   ];
+
   @override
-  void initState() {}
+  void initState() {
+    super.initState();
+    notificationReceiver();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +101,9 @@ class _MainScreenState extends State<MainScreen> {
                 icon: Image.asset("assets/images/icons/search.png"),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Nav().goTo(SendScreen(), context);
+                },
                 icon: Image.asset("assets/images/icons/scanner.png"),
               ),
               IconButton(
@@ -159,5 +171,74 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  void notificationReceiver() async {
+    try {
+      // when app is terminated
+      FirebaseMessaging.instance.getInitialMessage().then((message) async {
+        if (message != null) {
+          log('Notification received: ${message.data['uid']}');
+          if (message.data['type'] == 'transaction') {
+            var strs = message.data['id'].toString().split(',');
+            var user = await socialController.getUserReturn(userId: strs[1]);
+            showDialog(
+              barrierDismissible: false,
+              builder: (context) {
+                return RecievedScreen(
+                  user: user,
+                  value: strs[0],
+                );
+              },
+              context: context,
+            );
+          }
+        }
+      });
+
+      //in App
+      FirebaseMessaging.onMessage.listen((message) async {
+        if (message.notification != null) {
+          log(message.notification!.title!);
+          log(message.notification!.body!);
+          if (message.data['type'] == 'transaction') {
+            var strs = message.data['id'].toString().split(',');
+            var user = await socialController.getUserReturn(userId: strs[1]);
+            showDialog(
+              barrierDismissible: false,
+              builder: (context) {
+                return RecievedScreen(
+                  user: user,
+                  value: strs[0],
+                );
+              },
+              context: context,
+            );
+          } else {
+            LocalNotificationService.display(message);
+          }
+        }
+      });
+
+      //when app running in Background
+      FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+        if (message.data['type'] == 'transaction') {
+          var strs = message.data['id'].toString().split(',');
+          var user = await socialController.getUserReturn(userId: strs[1]);
+          showDialog(
+            barrierDismissible: false,
+            builder: (context) {
+              return RecievedScreen(
+                user: user,
+                value: strs[0],
+              );
+            },
+            context: context,
+          );
+        }
+      });
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

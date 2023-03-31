@@ -1,28 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/Models/wallet/transactionModel.dart';
 import 'package:crypto_wallet/Screens/Constants/DropDown.dart';
+import 'package:crypto_wallet/Screens/Constants/Notification.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
 import 'package:crypto_wallet/Screens/Constants/dialog.dart';
 import 'package:crypto_wallet/Screens/wallet/ScanQRCodeScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/qrCodeScreen.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
 import 'package:crypto_wallet/Screens/widgets/text_field.dart';
+import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SendScreen extends StatefulWidget {
-  const SendScreen({super.key});
+  String? id;
+  SendScreen({super.key, this.id});
 
   @override
   State<SendScreen> createState() => _SendScreenState();
 }
 
 class _SendScreenState extends State<SendScreen> {
-  TextEditingController toAddress = TextEditingController();
+  late TextEditingController toAddress;
   TextEditingController amt = TextEditingController();
   WalletController controller = Get.find();
+  SocialController socialController = Get.find();
   String errorText = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    toAddress = TextEditingController(text: widget.id ?? "");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,27 +152,44 @@ class _SendScreenState extends State<SendScreen> {
                     'token': FieldValue.increment(-double.parse(amt.text))
                   });
 
-                  firebaseFirestore
+                  controller.transcationCollection
+                      .add(TransactionModel(
+                              dateTime: DateTime.now(),
+                              sender:
+                                  controller.controller.firebaseUser.value!.uid,
+                              senderAddress:
+                                  controller.controller.firebaseUser.value!.uid,
+                              recieverAddress: toAddress.text,
+                              reciever: toAddress.text,
+                              members: [
+                                controller.controller.firebaseUser.value!.uid,
+                                toAddress.text
+                              ],
+                              value: double.tryParse(amt.text),
+                              gasFees: double.tryParse(amt.text)! * 0.01,
+                              status: "completed")
+                          .toJson())
+                      .then((value) {});
+
+                  var user = await socialController.getUserReturn(
+                      userId: toAddress.text);
+
+                  await sendNotification(
+                      title: "${amt.text} BNB Recieved in Wallet",
+                      body:
+                          "${controller.controller.firebaseUser.value!.displayName} has sent you ${amt.text} BNB",
+                      token: user.token!,
+                      dataMap: {
+                        'type': 'transaction',
+                        'id':
+                            "${amt.text},${controller.controller.firebaseUser.value!.uid}",
+                      });
+                  await firebaseFirestore
                       .collection('wallets')
                       .doc(toAddress.text)
                       .update({
                     'token': FieldValue.increment(double.parse(amt.text))
                   });
-                  controller.transcationCollection.add(TransactionModel(
-                          dateTime: DateTime.now(),
-                          sender: controller.controller.firebaseUser.value!.uid,
-                          senderAddress:
-                              controller.controller.firebaseUser.value!.uid,
-                          recieverAddress: toAddress.text,
-                          reciever: toAddress.text,
-                          members: [
-                            controller.controller.firebaseUser.value!.uid,
-                            toAddress.text
-                          ],
-                          value: double.tryParse(amt.text),
-                          gasFees: double.tryParse(amt.text)! * 0.01,
-                          status: "completed")
-                      .toJson());
                   await showDialog<void>(
                       context: context,
                       barrierColor: kGrey.withOpacity(0.6),
@@ -214,7 +243,7 @@ class _SendScreenState extends State<SendScreen> {
         width: Config().deviceWidth(context) * 0.8,
         height: 50,
         decoration: BoxDecoration(
-            color: kLightGrey, borderRadius: BorderRadius.circular(12)),
+            color: kWhite, borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustDropDown(
@@ -234,6 +263,7 @@ class _SendScreenState extends State<SendScreen> {
               ),
             ],
             hintText: "Select Network",
+            defaultSelectedIndex: 0,
             borderRadius: 5,
             onChanged: (val) {
               setState(() {

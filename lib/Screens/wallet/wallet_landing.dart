@@ -1,12 +1,14 @@
 import 'package:crypto_wallet/Models/wallet/transactionModel.dart';
 import 'package:crypto_wallet/Models/wallet/walletModel.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
+import 'package:crypto_wallet/Screens/transaction/recievedPayment.dart';
 import 'package:crypto_wallet/Screens/transaction/send.dart';
 import 'package:crypto_wallet/Screens/wallet/ScanQRCodeScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/createWalletScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/qrCodeScreen.dart';
 import 'package:crypto_wallet/Screens/wallet/scan_qr.dart';
 import 'package:crypto_wallet/Screens/widgets/buttons.dart';
+import 'package:crypto_wallet/controllers/SocialController.dart';
 import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +26,7 @@ class WalletLanding extends StatefulWidget {
 
 class _WalletLandingState extends State<WalletLanding> {
   WalletController controller = Get.find();
+  SocialController socialController = Get.find();
   bool scan = true;
 
   @override
@@ -198,7 +201,7 @@ class _WalletLandingState extends State<WalletLanding> {
                     child: ThemeButton(
                   text: "Send",
                   onTap: () {
-                    Nav().goTo(const SendScreen(), context);
+                    Nav().goTo(SendScreen(), context);
                   },
                   height: 46,
                   child: Row(
@@ -327,7 +330,22 @@ class _WalletLandingState extends State<WalletLanding> {
     bool issender =
         controller.controller.firebaseUser.value!.uid == trsc.sender;
     return ListTile(
-      title: Text("${issender ? "-" : "+"}" + trsc.value.toString() + "BNB"),
+      onTap: () async {
+        var user = await socialController.getUserReturn(
+            userId: trsc.members!.firstWhere((element) =>
+                controller.controller.firebaseUser.value!.uid != element));
+
+        await showDialog(
+          barrierDismissible: false,
+          builder: (context) {
+            return RecievedScreen(
+                user: user,
+                value: "${issender ? "-" : "+"}" + trsc.value.toString());
+          },
+          context: context,
+        );
+      },
+      title: Text("${issender ? "-" : "+"}" + trsc.value.toString() + " BNB"),
       subtitle: Text(issender ? "Sent" : "Recieved"),
       leading: Image.asset(
         "assets/images/bnb-logo.png",

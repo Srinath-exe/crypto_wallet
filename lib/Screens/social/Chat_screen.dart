@@ -86,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             chatId: controller.chatId.value,
                           )),
                 ChatTextFeild(
+                  user: widget.user.uid!,
                   id: controller.chatId.value,
                   onSend: (text) {
                     var messageId = const Uuid().v1();

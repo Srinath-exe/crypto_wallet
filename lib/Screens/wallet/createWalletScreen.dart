@@ -5,6 +5,7 @@ import 'package:crypto_wallet/Screens/widgets/buttons.dart';
 import 'package:crypto_wallet/controllers/walletController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -89,7 +90,14 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     color: kWhite),
               ),
             )),
-            IconButton(onPressed: () {}, icon: Icon(Icons.copy_rounded))
+            IconButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: id)).then((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Copied to your clipboard !')));
+                  });
+                },
+                icon: Icon(Icons.copy_rounded))
           ],
         ),
       ),
