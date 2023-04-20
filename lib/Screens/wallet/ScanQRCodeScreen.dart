@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQrCodeScreen extends StatefulWidget {
-  Function(String) onScanned;
+  bool Function(String) onScanned;
   ScanQrCodeScreen({super.key, required this.onScanned});
 
   @override
@@ -62,42 +62,41 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                   cutOutSize: Config().deviceWidth(context) * 0.8),
             ),
           ),
-          Expanded(
-              flex: 1,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(barcode == null ? 'Scan a code' : "${barcode!.code}"),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    barcode == null
-                        ? const SizedBox()
-                        : TextButton(
-                            onPressed: () {
-                              widget.onScanned(barcode!.code!);
-                              // Navigator.pop(context);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(
-                                  Icons.done,
-                                  color: kGreen,
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                const Text(
-                                  "Done",
-                                  style: TextStyle(color: kWhite, fontSize: 16),
-                                )
-                              ],
-                            ))
-                  ],
-                ),
-              )),
+          // Expanded(
+          //     flex: 1,
+          //     child: Center(
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text(barcode == null ? 'Scan a code' : "${barcode!.code}"),
+          //           const SizedBox(
+          //             height: 12,
+          //           ),
+          //           barcode == null
+          //               ? const SizedBox()
+          //               : TextButton(
+          //                   onPressed: () {
+          //                     widget.onScanned(barcode!.code!);
+          //                   },
+          //                   child: Row(
+          //                     mainAxisSize: MainAxisSize.min,
+          //                     children: const [
+          //                       Icon(
+          //                         Icons.done,
+          //                         color: kGreen,
+          //                       ),
+          //                       SizedBox(
+          //                         width: 12,
+          //                       ),
+          //                       Text(
+          //                         "Done",
+          //                         style: TextStyle(color: kWhite, fontSize: 16),
+          //                       )
+          //                     ],
+          //                   ))
+          //         ],
+          //       ),
+          //     )),
         ],
       ),
     );
@@ -112,8 +111,9 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
       setState(() {
         barcode = event;
       });
-      widget.onScanned(barcode!.code!);
-      Navigator.pop(context);
+      if (widget.onScanned(barcode!.code!)) {
+        Navigator.pop(context);
+      }
     });
   }
 }

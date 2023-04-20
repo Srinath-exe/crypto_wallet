@@ -59,6 +59,7 @@ class MessageModel {
 
 enum MessageType {
   text('text'),
+  payment('payment'),
   image('image'),
   audio('audio'),
   video('video'),
@@ -88,4 +89,5 @@ Map<String, MessageType> messageTypetoString = {
   'place': MessageType.place,
   'profile': MessageType.profile,
   'offers': MessageType.offers,
+  'payment': MessageType.payment
 };

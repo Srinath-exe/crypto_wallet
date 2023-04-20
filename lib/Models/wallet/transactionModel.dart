@@ -48,7 +48,7 @@ class TransactionModel {
     String data = json.data().toString();
 
     return TransactionModel(
-      transactionId: json["transactionId"],
+      transactionId: json.id,
       sender: json["sender"],
       reciever: json["reciever"],
       token: json["token"],

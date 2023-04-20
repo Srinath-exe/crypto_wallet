@@ -75,7 +75,10 @@ class _MessageBubbleState extends State<MessageBubble> {
         return text();
       case MessageType.image:
         return image();
-        break;
+
+      case MessageType.payment:
+        return paymentCard();
+
       case MessageType.audio:
         // TODO: Handle this case.
         break;
@@ -215,6 +218,57 @@ class _MessageBubbleState extends State<MessageBubble> {
           ),
         );
       },
+    );
+  }
+
+  paymentCard() {
+    return Container(
+      // width: 200,
+      padding: EdgeInsets.all(16),
+      decoration:
+          BoxDecoration(color: kBlack, borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          Text(
+            "sent to  ${controller.messageUsers[widget.message.recieverid]!.name!}",
+            style: const TextStyle(
+                color: kWhite, fontWeight: FontWeight.w600, fontSize: 14),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/bnb-logo.png",
+                      width: 30,
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      "${widget.message.text}",
+                      style: const TextStyle(
+                          color: kWhite,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 26),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Chip(
+            label: Text(
+              widget.sender ? "${widget.message.data!.capitalize}" : "Recieved",
+              style: const TextStyle(
+                  color: kBlack, fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

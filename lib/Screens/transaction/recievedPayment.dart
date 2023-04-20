@@ -202,12 +202,14 @@ class _RecievedScreenState extends State<RecievedScreen> {
                   const SizedBox(
                     width: 12,
                   ),
-                  Text(
-                    "${controller.wallet.value.token}",
-                    style: const TextStyle(
-                        color: kWhite,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 26),
+                  Expanded(
+                    child: Text(
+                      "${controller.wallet.value.token}",
+                      style: const TextStyle(
+                          color: kWhite,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20),
+                    ),
                   ),
                 ],
               ),

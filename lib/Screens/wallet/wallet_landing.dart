@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:crypto_wallet/Models/wallet/transactionModel.dart';
 import 'package:crypto_wallet/Models/wallet/walletModel.dart';
 import 'package:crypto_wallet/Screens/Constants/constants.dart';
@@ -140,12 +142,14 @@ class _WalletLandingState extends State<WalletLanding> {
                   const SizedBox(
                     width: 12,
                   ),
-                  Text(
-                    "${controller.wallet.value.token}",
-                    style: const TextStyle(
-                        color: kWhite,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 40),
+                  Expanded(
+                    child: Text(
+                      "${controller.wallet.value.token}",
+                      style: const TextStyle(
+                          color: kWhite,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20),
+                    ),
                   ),
                 ],
               ),

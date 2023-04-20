@@ -23,22 +23,24 @@ class UserModel {
       this.lastSeen,
       this.token});
 
-  UserModel.fromMap(DocumentSnapshot data) {
-    uid = data['uid'];
-    name = data['name'].toString().capitalize;
-    mail = data['email'];
-    phone = data['phone'];
-    profileUrl = data['photo_url'];
-    friends = data['friends'] == null
-        ? []
-        : List<String>.from(data['friends']!.map((x) => x));
-    isOnline = data["isOnline"] ?? false;
-    lastSeen = data["lastSeen"] == null || data["lastSeen"] == ""
-        ? DateTime.parse(DateTime.now.toString())
-        : DateTime.parse(data["lastSeen"].toString());
-    token = data['token'] == null
-        ? []
-        : List<String>.from(data['token']!.map((x) => x));
+  factory UserModel.fromMap(DocumentSnapshot data) {
+    return UserModel(
+      uid: data['uid'],
+      name: data['name'].toString().capitalize,
+      mail: data['email'],
+      phone: data['phone'],
+      profileUrl: data['photo_url'],
+      friends: data['friends'] == null
+          ? []
+          : List<String>.from(data['friends']!.map((x) => x)),
+      isOnline: data["isOnline"] ?? false,
+      lastSeen: data["lastSeen"] == null || data["lastSeen"] == ""
+          ? DateTime.parse(DateTime.now.toString())
+          : DateTime.parse(data["lastSeen"].toString()),
+      token: data['token'] == null
+          ? []
+          : List<String>.from(data['token']!.map((x) => x)),
+    );
   }
 
   Map<String, dynamic> toJson() => {

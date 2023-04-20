@@ -7,6 +7,7 @@ Widget textField({
   //required double height,
   bool obscureText = false,
   TextInputType? keybordType,
+  Function(String)? onChanged,
   Widget? suffixIcon,
 }) {
   return SizedBox(
@@ -17,6 +18,7 @@ Widget textField({
       style: const TextStyle(
         color: kWhite,
       ),
+      onChanged: onChanged,
       obscureText: obscureText,
       cursorColor: kLightGrey,
       autofocus: false,

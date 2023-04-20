@@ -88,7 +88,7 @@ class _ChatTextFeildState extends State<ChatTextFeild> {
                                   onPressed: () {
                                     Nav().goTo(
                                         SendScreen(
-                                          id: widget.id,
+                                          id: widget.user,
                                         ),
                                         context);
                                   },

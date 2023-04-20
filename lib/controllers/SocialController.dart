@@ -46,13 +46,19 @@ class SocialController extends GetxController {
   }
 
   Future<UserModel> getUserReturn({required String userId}) async {
-    return firebaseFirestore
-        .collection('users')
-        .doc(userId)
-        .get()
-        .then((value) {
-      return UserModel.fromMap(value);
-    });
+    try {
+      log(userId);
+      return firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .get()
+          .then((value) {
+        return UserModel.fromMap(value);
+      });
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   Stream<List<ChatModel>> getAllChats() => chatCollection
@@ -69,6 +75,21 @@ class SocialController extends GetxController {
         .snapshots()
         .map((query) =>
             query.docs.map((item) => UserModel.fromMap(item)).toList());
+  }
+
+  Future<String?> findChatId(String chatUsers) async {
+    List<ChatModel> chat = await chatCollection
+        .where('users', arrayContains: chatUsers)
+        .get()
+        .then((value) => value.docs.map((e) => ChatModel.fromJson(e)).toList());
+
+    for (int index = 0; index < chat.length; index++) {
+      if (chat[index].users!.contains(authController.currentUser.value.uid)) {
+        return chat[index].chatId;
+      }
+    }
+
+    return null;
   }
 
   void sendText({
